@@ -1,13 +1,13 @@
 {
-  "name": "@alife/we-app-resource-loader",
+  "name": "@saasfe/we-app-resource-loader",
   "version": "1.0.0",
   "description": "we app resource loader",
-  "homepage": "http://gitlab.alibaba-inc.com/alsc-materials-group/we-app-resource-loader",
+  "homepage": "https://github.com/alsc-sfe/we-app-resource-loader",
   "repository": {
     "type": "git",
-    "url": "http://gitlab.alibaba-inc.com/alsc-materials-group/we-app-resource-loader"
+    "url": "https://github.com/alsc-sfe/we-app-resource-loader"
   },
-  "author": "少楚",
+  "author": "zetay",
   "files": [
     "document",
     "src",
@@ -73,6 +73,6 @@
     "lint"
   ],
   "publishConfig": {
-    "registry": "http://registry.npm.alibaba-inc.com"
+    "registry": "https://registry.npmjs.org/"
   }
 }

@@ -6,7 +6,7 @@ title: demo1
 PC模板
 
 ````jsx
-import TemplatePc from "@alife/we-app-resource-loader";
+import TemplatePc from "@saasfe/we-app-resource-loader";
 
 class Demo extends React.Component {
   componentDidMount() {}
