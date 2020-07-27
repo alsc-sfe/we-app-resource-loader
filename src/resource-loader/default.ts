@@ -10,6 +10,22 @@
 import { SafeHookScope, Resource, ResourceLoaderDesc, ResourceLoader } from '@saasfe/we-app-types';
 import { isObj, isFunction, isString, loadScript, loadCSS, removeScript, removeCSS, checkWhile } from '@saasfe/we-app-utils';
 
+let pLoadSystem: Promise<any>;
+export async function getSystem({ root, sandbox }: SafeHookScope = { root: window }) {
+  let loader = loadScript;
+  if (sandbox && sandbox.loadResource) {
+    loader = sandbox.loadResource;
+  }
+  if (!(root.System && root.System.import) && !pLoadSystem) {
+    pLoadSystem = loader('https://gw.alipayobjects.com/os/lib/systemjs/6.3.3/dist/??system.min.js,extras/named-register.min.js').then(() => {
+      return checkWhile(() => !!(root.System && root.System.import));
+    });
+  }
+
+  await pLoadSystem;
+
+  return root.System;
+}
 
 export interface DefaultResourceLoaderOpts {
   useSystem?: boolean;
@@ -25,19 +41,13 @@ const resourceLoader: ResourceLoaderDesc<DefaultResourceLoaderOpts> = {
     activeScope: SafeHookScope,
     opts: DefaultResourceLoaderOpts = { useSystem: true }
   ) {
-    const { root = window } = activeScope;
     const { useSystem, getEntry } = opts;
 
     if (isString(resource)) {
       if ((resource as string).indexOf('.js') > -1) {
         if (useSystem) {
-          let System;
-          if (root.System && root.System.import) {
-            System = root.System;
-          } else {
-            throw new Error('[we app](Error from resourceLoader)请先引入systemjs');
-          }
-          const mod = System.import(resource);
+          const System = await getSystem(activeScope);
+          const mod = System.import(resource as string);
           if (isFunction(getEntry)) {
             return mod.then((module: any) => getEntry(module, resource, activeScope));
           }
@@ -68,13 +78,13 @@ const resourceLoader: ResourceLoaderDesc<DefaultResourceLoaderOpts> = {
     activeScope: SafeHookScope,
     opts: DefaultResourceLoaderOpts = { useSystem: true }
   ) {
-    const { root = window } = activeScope;
     const { useSystem } = opts;
 
     if (isString(resource)) {
       if ((resource as string).indexOf('.js') > -1) {
         if (useSystem) {
-          root.System && root.System.delete(resource as string);
+          const System = await getSystem(activeScope);
+          System.delete(resource as string);
           return;
         }
 
