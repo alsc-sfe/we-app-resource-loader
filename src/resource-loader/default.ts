@@ -11,11 +11,15 @@ import { SafeHookScope, Resource, ResourceLoaderDesc, ResourceLoader } from '@sa
 import { isObj, isFunction, isString, loadScript, loadCSS, removeScript, removeCSS, checkWhile } from '@saasfe/we-app-utils';
 
 let pLoadSystem: Promise<any>;
-export async function getSystem({ root, sandbox }: SafeHookScope = { root: window }) {
+export async function getSystem(hookScope: SafeHookScope = { root: window }) {
   let loader = loadScript;
+
+  const { sandbox } = hookScope;
   if (sandbox && sandbox.loadResource) {
     loader = sandbox.loadResource;
   }
+
+  const root = hookScope.root || window;
   if (!(root.System && root.System.import) && !pLoadSystem) {
     pLoadSystem = loader('https://gw.alipayobjects.com/os/lib/systemjs/6.3.3/dist/??system.min.js,extras/named-register.min.js').then(() => {
       return checkWhile(() => !!(root.System && root.System.import));
