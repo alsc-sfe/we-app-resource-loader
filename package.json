@@ -1,6 +1,6 @@
 {
   "name": "@saasfe/we-app-resource-loader",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "we app resource loader",
   "homepage": "https://github.com/alsc-sfe/we-app-resource-loader",
   "repository": {
@@ -30,8 +30,8 @@
   "main": "lib/index.js",
   "module": "es/index.js",
   "dependencies": {
-    "@saasfe/we-app-types": "beta",
-    "@saasfe/we-app-utils": "beta",
+    "@saasfe/we-app-types": "^1.0.0",
+    "@saasfe/we-app-utils": "^1.0.0",
     "tslib": "1"
   },
   "devDependencies": {
